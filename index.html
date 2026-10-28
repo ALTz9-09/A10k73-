@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Sơ đồ lớp</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="xlsx.full.min.js"></script>
+    <script defer src="jszip.min.js"></script>
+    <script defer src="template-data.js"></script>
+    <script defer src="export-word.js"></script>
+    <script defer src="app.js"></script>
+    <script defer src="arrange.js"></script>
+</head>
+
+<body>
+    <header>
+        <div class="brand"><img class="brand-logo" src="avat.png" alt="Logo Sơ đồ lớp" width="40" height="40"><span>Sơ
+                đồ lớp</span></div><button id="word">Tải Word (.docx)</button><button id="print">In / Lưu PDF</button>
+    </header>
+    <main>
+        <aside>
+            <h1>Tạo sơ đồ lớp</h1>
+            <p class="intro">Điền thông tin, nhập danh sách và sắp xếp chỗ ngồi.</p>
+            <section>
+                <h2><b>1</b> Thông tin lớp</h2><label>Giáo viên chủ nhiệm<input id="teacher"
+                        placeholder="Nhập họ tên GVCN" maxlength="70"></label>
+                <div class="pair"><label>Lớp<input id="className" placeholder="11/10" maxlength="20"></label><label>Năm
+                        học<input id="year" value="2026 – 2027" maxlength="30"></label></div>
+            </section>
+            <section>
+                <h2><b>2</b> Danh sách học sinh</h2><button class="secondary template-download" id="template">↓ Tải
+                    Excel mẫu</button>
+                <p class="hint">Điền họ tên vào mẫu. Nếu muốn ai đó luôn vào bàn cụ thể khi random, điền số bàn ở cột bên cạnh (hoặc cạnh tên).</p><label class="upload">↑
+                    Tải Excel đã điền<input id="file" type="file" accept=".xlsx,.xls"><small>Tối đa 48 học
+                        sinh</small></label><label class="upload">↑ Nạp sơ đồ Word<input id="docx-file" type="file"
+                        accept=".docx"><small>Dùng mẫu Word này hoặc file xuất từ web</small></label>
+                <p id="status" role="status" aria-live="polite"></p><button id="random" class="random-button" disabled>✦
+                    Random chỗ ngồi</button><button id="export-random" class="secondary result-button" disabled>↓ Tải
+                    Excel kết quả</button>
+            </section>
+            <section>
+                <h2><b>3</b> Chỉnh chỗ ngồi</h2>
+                <p class="hint">Bấm vào tên để sửa. Để đổi chỗ, bật chế độ bên dưới rồi chọn hai ô.</p><label
+                    class="check"><input type="checkbox" id="swap">Chọn hai ô để đổi chỗ</label>
+                <div class="rotation-controls">
+                    <label class="check"><input type="checkbox" id="lock-mode">Chọn bàn cố định khi luân chuyển</label>
+                    <p class="hint">Bật rồi bấm bàn trên sơ đồ để khóa/mở khóa. Cả hai học sinh tại bàn được giữ nguyên.
+                    </p>
+                    <button id="unlock-all" class="secondary">Bỏ cố định tất cả</button>
+                    <label>Chiều cuốn chiếu trong từng dãy<select id="row-direction">
+                            <option value="1">Về phía bảng ↓</option>
+                            <option value="-1">Ra phía sau ↑</option>
+                        </select></label>
+                    <button id="rotate-desks">Đổi bàn cuốn chiếu</button>
+                    <label>Chiều đổi dãy (nhìn trên sơ đồ)<select id="column-direction">
+                            <option value="1">Sang phải →</option>
+                            <option value="-1">Sang trái ←</option>
+                        </select></label>
+                    <button id="rotate-columns">Đổi dãy theo chiều đã chọn</button>
+                    <p class="hint">Mỗi lần dịch một bước, cuối vòng quay về đầu. Bỏ qua bàn cố định; hai học sinh cùng
+                        bàn luôn đi cùng nhau. Khi đổi dãy, các bàn không khóa luân chuyển trong từng hàng.</p>
+                    <button id="undo-arrange" class="secondary" disabled>↶ Hoàn tác lần đổi gần nhất</button>
+                </div><button class="secondary" id="clear">Xóa tên trên sơ đồ</button>
+            </section>
+            <p class="privacy">File được xử lý trên thiết bị của bạn. Tải lại trang sẽ xóa dữ liệu đã nhập.</p>
+        </aside>
+        <article>
+            <div class="previewbar"><strong>Bản xem trước</strong><span id="occupied">0 / 48 chỗ</span></div>
+            <div class="scroll">
+                <div id="paper">
+                    <h2 id="title">SƠ ĐỒ LỚP … NĂM HỌC: 2025 – 2026</h2>
+                    <h3 id="subtitle">GVCN: …</h3>
+                    <div class="paper-groups"><span>Dãy 1</span><span>Dãy 2</span><span>Dãy 3</span><span>Dãy 4</span>
+                    </div>
+                    <div id="desks"></div>
+                    <div class="front"><svg class="door" viewBox="0 0 200 120" aria-label="Cửa vào">
+                            <path d="M5 35 H145 V10 L195 60 L145 110 V85 H5 Z" fill="white" stroke="black"
+                                stroke-width="4" />
+                        </svg>
+                        <div class="board">BẢNG</div>
+                        <div class="teacherdesk">BÀN<br>GIÁO VIÊN</div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </main>
+    <div id="random-modal" class="modal" hidden>
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="random-title"><button id="random-close"
+                class="modal-close" aria-label="Đóng">×</button>
+            <div id="random-select-view">
+                <p class="eyebrow">RANDOM CHỖ NGỒI</p>
+                <h2 id="random-title">Chọn các bàn được sử dụng</h2>
+                <p class="modal-help">Bấm vào từng bàn theo thứ tự bạn muốn đánh số. Mỗi bàn có 2 chỗ.</p>
+                <div class="group-headings"><span>Tổ 1</span><span>Tổ 2</span><span>Tổ 3</span><span>Tổ 4</span></div>
+                <div id="desk-picker" class="desk-picker"></div>
+                <div class="selection-summary"><strong id="selected-count">Chưa chọn bàn</strong><span
+                        id="required-count"></span></div>
+                <p id="random-error" class="random-error" role="alert"></p>
+                <div class="modal-actions"><button id="select-all" class="secondary">Chọn tất cả</button><button
+                        id="start-random">Bắt đầu random</button></div>
+            </div>
+            <div id="random-run-view" hidden>
+                <p class="eyebrow">ĐANG RANDOM</p>
+                <h2>Xếp chỗ ngẫu nhiên</h2>
+                <div class="draw-card">
+                    <div id="draw-name" class="draw-name">Sẵn sàng</div>
+                    <div class="draw-label">BÀN</div>
+                    <div id="draw-number" class="draw-number">?</div>
+                </div>
+                <div class="progress-track"><span id="random-progress"></span></div>
+                <p id="progress-text" class="progress-text"></p>
+                <div id="assignment-list" class="assignment-list"></div>
+                <div class="modal-actions"><button id="skip-animation" class="secondary">Bỏ qua hiệu ứng</button><button
+                        id="finish-random" hidden>Hoàn tất</button></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

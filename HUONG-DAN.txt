@@ -1,0 +1,14 @@
+SƠ ĐỒ LỚP – BẢN CẬP NHẬT
+
+Giải nén và mở index.html bằng Chrome hoặc Edge. Khi cập nhật GitHub Pages, tải toàn bộ các file trong thư mục A10k73-main lên cùng cấp với index.html, sau đó nhấn Ctrl+F5.
+
+1. Excel: dùng mẫu có cột Họ và tên, tối đa 48 học sinh. Nếu muốn ai đó luôn vào bàn cụ thể khi random, điền số bàn vào cột bên cạnh (hoặc cạnh tên, ví dụ: 1, 2,...). Mỗi bàn có tối đa 2 học sinh.
+2. Nạp sơ đồ Word: chọn file .docx theo mẫu sodo1210 hoặc file xuất từ phiên bản này. Nạp đúng tên, vị trí, ô trống, lớp, năm học và GVCN (nếu có). Chưa hỗ trợ mọi bố cục Word hoặc file .doc cũ.
+3. Cố định bàn: bật Chọn bàn cố định rồi bấm bàn cần giữ nguyên. Bàn khóa có viền vàng. Khóa chỉ áp dụng cho hai nút luân chuyển, không áp dụng cho random hay sửa tên thủ công.
+4. Đổi bàn cuốn chiếu: hai học sinh đi cùng nhau đến bàn kế tiếp trong cùng dãy, theo chiều đã chọn. Bảng ở phía dưới sơ đồ. Bỏ qua bàn cố định, cuối vòng trở về đầu.
+5. Đổi dãy: sang trái/phải theo màn hình. Khi không khóa bàn, cả dãy dịch một bước. Nếu có bàn khóa, các bàn còn lại trong từng hàng luân chuyển, bỏ qua vị trí khóa.
+6. Hoàn tác: tối đa 30 lần đổi bàn/đổi dãy liên tiếp. Sửa tên, nạp danh sách mới hoặc random sẽ xóa lịch sử hoàn tác.
+7. Tải Word: dùng bố cục từ mẫu mới đã gửi. Có thể nạp lại file này để tiếp tục chỉnh. File template.docx là mẫu trống; template-data.js chứa dữ liệu mẫu dùng cho chức năng xuất.
+8. Sau chỉnh tên/đổi bàn/đổi dãy, Excel kết quả cập nhật theo chỗ ngồi hiện tại và dùng số bàn 1–24, đếm từ trái sang phải, từ hàng trên xuống. Khi random, số bàn theo thứ tự bấm chọn. Số bàn là nhãn hỗ trợ trên web và Excel, không thêm vào mẫu Word.
+
+Dữ liệu xử lý trên thiết bị. Tải Word để giữ sơ đồ trước khi đóng hoặc tải lại trang.
