@@ -118,7 +118,7 @@ $('file').onchange = async () => {
     $('random').disabled = false; $('export-random').disabled = true;
     resetSelection(); updateCount();
     const fixedCount = importedStudents.filter(s => s.fixedDesk).length;
-    $('status').textContent = `Đã nhận ${importedStudents.length} học sinh${fixedCount ? ` (có ${fixedCount} học sinh được gán sẵn số bàn)` : ''}.`;
+    $('status').textContent = `Đã nhận ${importedStudents.length} học sinh${fixedCount ? ` (có ${fixedCount} học sinh đã được nhận diện)` : ''}.`;
   } catch (error) { $('status').textContent = error.message; }
   finally { input.disabled = false; input.value = ''; }
 };
